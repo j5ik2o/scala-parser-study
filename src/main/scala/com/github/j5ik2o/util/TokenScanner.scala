@@ -49,7 +49,7 @@ class TokenScanner(source: CharacterSource) {
   }
 
   private def isIdentifierStart(c: Int) = {
-    ('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z') || (c == '_') || (c == '+') || (c == '=')
+    ('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z') || (c == '_') || (c == '+') || (c == '-')
   }
 
   private def isDigit(c: Int) = {

@@ -2,7 +2,7 @@ package com.github.j5ik2o.util
 
 import com.github.j5ik2o.parser.model.{SubExpr, ValueExpr, AddExpr, Expression}
 
-class Evaluator extends Visitor {
+class Evaluator extends ExpressionVisitor {
 
   def visit(expression: Expression): Any = expression match {
     case AddExpr(l, r) =>
