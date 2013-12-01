@@ -21,6 +21,8 @@ import java.io.StringReader
 
 class Q0ParserSpec extends Specification with SpecSupport {
 
+  sequential
+
   protected def createParser(input: String): Parser =
     new Q0Parser(new StringReader(input))
 

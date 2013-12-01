@@ -16,5 +16,5 @@
  */
 package com.github.j5ik2o.sps.model
 
-case class ValueExpr(value: Int) extends Expression
+case class ValueExpr(value: BigDecimal) extends Expression
 

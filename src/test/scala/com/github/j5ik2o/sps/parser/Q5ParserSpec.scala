@@ -16,11 +16,16 @@
 package com.github.j5ik2o.sps.parser
 
 import org.specs2.mutable.Specification
-import com.github.j5ik2o.sps.model.{ParenthesizedExpr, SubExpr, MinusExpr, ValueExpr}
+import com.github.j5ik2o.sps.model._
 import java.io.StringReader
+import com.github.j5ik2o.sps.model.SubExpr
+import com.github.j5ik2o.sps.model.ParenthesizedExpr
+import com.github.j5ik2o.sps.model.ValueExpr
 
 class Q5ParserSpec extends Specification with SpecSupport {
+
   sequential
+
   protected def createParser(input: String): Parser =
     new Q5Parser(new StringReader(input))
 
@@ -28,12 +33,12 @@ class Q5ParserSpec extends Specification with SpecSupport {
     "be the same as 10" in {
       process("(((10)))") must_==(ParenthesizedExpr(ParenthesizedExpr(ParenthesizedExpr(ValueExpr(10)))), 10)
     }
-//    "be the same as -10" in {
-//      process("10 + 20 - 30 * 40 / 60") must_==(MinusExpr(ValueExpr(10)), -10)
-//    }
-//    "be the same as -10" in {
-//      process("10 + -(20 - +30) + +-0") must_==(SubExpr(ValueExpr(10), ValueExpr(20)), -10)
-//    }
+    "be the same as -10" in {
+      process("10 + 20 - 30 * 40 / 60") must_==(SubExpr(AddExpr(ValueExpr(10),ValueExpr(20)),DivExpr(MultiExpr(ValueExpr(30),ValueExpr(40)),ValueExpr(60))),10)
+    }
+    "be the same as -10" in {
+      process("10 + -(20 - +30) + +-0") must_==(AddExpr(AddExpr(ValueExpr(10),MinusExpr(ParenthesizedExpr(SubExpr(ValueExpr(20),PlusExpr(ValueExpr(30)))))),PlusExpr(MinusExpr(ValueExpr(0)))),20)
+    }
   }
 
 }

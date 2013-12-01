@@ -24,6 +24,8 @@ import com.github.j5ik2o.sps.model.ValueExpr
 
 class Q3ParserSpec extends Specification with SpecSupport {
 
+  sequential
+
   protected def createParser(input: String): Parser =
     new Q3Parser(new StringReader(input))
 

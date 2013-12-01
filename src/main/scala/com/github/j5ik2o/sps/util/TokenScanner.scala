@@ -74,8 +74,11 @@ case class TokenScanner(source: CharacterSource) {
   private def isIdentifierStart(c: Int) = {
     ('A' <= c && c <= 'Z') ||
       ('a' <= c && c <= 'z') ||
-      (c == '_') || (c == '(') || (c == ')') || isOperator(c) || isDigit(c)
+      (c == '_') || isParenthesized(c) || isOperator(c) || isDigit(c)
   }
+
+  private def isParenthesized(c: Int) =
+    (c == '(') || (c == ')')
 
   private def isOperator(c: Int) = {
     (c == '+') ||
@@ -139,7 +142,7 @@ case class TokenScanner(source: CharacterSource) {
       }
 
     }
-    if (start != '(' && start != ')') {
+    if (!isParenthesized(start) && !isOperator(start)) {
       loop()
     }
     val image = buf.toString()
