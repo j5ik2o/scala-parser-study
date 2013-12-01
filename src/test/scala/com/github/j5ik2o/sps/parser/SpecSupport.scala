@@ -21,10 +21,10 @@ trait SpecSupport {
 
   protected def createParser(input: String): Parser
 
-  protected def process(input: String) = {
+  protected def eval(input: String) = {
     val expression = createParser(input).parse()
     val result = expression.accept(Evaluator())
-    println(s"input = $input, ast = $expression, result = $result")
+    //println(s"input = $input, ast = $expression, result = $result")
     (expression, result)
   }
 

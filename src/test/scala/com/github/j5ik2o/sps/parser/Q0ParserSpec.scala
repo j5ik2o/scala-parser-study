@@ -28,8 +28,8 @@ class Q0ParserSpec extends Specification with SpecSupport {
 
   "Parse result" should {
     "be correct" in {
-      process("+ 10 20") must_==(AddExpr(ValueExpr(10), ValueExpr(20)), 30)
-      process("- 50 20") must_==(SubExpr(ValueExpr(50), ValueExpr(20)), 30)
+      eval("+ 10 20") must_==(AddExpr(ValueExpr(10), ValueExpr(20)), 30)
+      eval("- 50 20") must_==(SubExpr(ValueExpr(50), ValueExpr(20)), 30)
     }
   }
 

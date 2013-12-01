@@ -28,9 +28,9 @@ class Q1ParserSpec extends Specification with SpecSupport {
 
   "Parse result" should {
     "be correct" in {
-      process("10") must_==(ValueExpr(10), 10)
-      process("+ 10 - 20 30") must_==(AddExpr(ValueExpr(10), SubExpr(ValueExpr(20), ValueExpr(30))), 0)
-      process("+ + + 10 - 20 30 40 50") must_==(AddExpr(AddExpr(AddExpr(ValueExpr(10), SubExpr(ValueExpr(20), ValueExpr(30))), ValueExpr(40)), ValueExpr(50)), 90)
+      eval("10") must_==(ValueExpr(10), 10)
+      eval("+ 10 - 20 30") must_==(AddExpr(ValueExpr(10), SubExpr(ValueExpr(20), ValueExpr(30))), 0)
+      eval("+ + + 10 - 20 30 40 50") must_==(AddExpr(AddExpr(AddExpr(ValueExpr(10), SubExpr(ValueExpr(20), ValueExpr(30))), ValueExpr(40)), ValueExpr(50)), 90)
     }
   }
 

@@ -31,9 +31,9 @@ class Q5ParserSpec extends Specification with SpecSupport {
 
   "Parse result" should {
     "be correct" in {
-      process("(((10)))") must_==(ParenthesizedExpr(ParenthesizedExpr(ParenthesizedExpr(ValueExpr(10)))), 10)
-      process("10 + 20 - 30 * 40 / 60") must_==(SubExpr(AddExpr(ValueExpr(10), ValueExpr(20)), DivExpr(MultiExpr(ValueExpr(30), ValueExpr(40)), ValueExpr(60))), 10)
-      process("10 + -(20 - +30) + +-0") must_==(AddExpr(AddExpr(ValueExpr(10), MinusExpr(ParenthesizedExpr(SubExpr(ValueExpr(20), PlusExpr(ValueExpr(30)))))), PlusExpr(MinusExpr(ValueExpr(0)))), 20)
+      eval("(((10)))") must_==(ParenthesizedExpr(ParenthesizedExpr(ParenthesizedExpr(ValueExpr(10)))), 10)
+      eval("10 + 20 - 30 * 40 / 60") must_==(SubExpr(AddExpr(ValueExpr(10), ValueExpr(20)), DivExpr(MultiExpr(ValueExpr(30), ValueExpr(40)), ValueExpr(60))), 10)
+      eval("10 + -(20 - +30) + +-0") must_==(AddExpr(AddExpr(ValueExpr(10), MinusExpr(ParenthesizedExpr(SubExpr(ValueExpr(20), PlusExpr(ValueExpr(30)))))), PlusExpr(MinusExpr(ValueExpr(0)))), 20)
     }
   }
 

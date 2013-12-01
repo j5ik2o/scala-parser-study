@@ -28,9 +28,9 @@ class Q2ParserSpec extends Specification with SpecSupport {
 
   "Parse result" should {
     "be correct" in {
-      process("10") must_==(ValueExpr(10), 10)
-      process("- 10") must_==(MinusExpr(ValueExpr(10)), -10)
-      process("- 10 20") must_==(SubExpr(ValueExpr(10), ValueExpr(20)), -10)
+      eval("10") must_==(ValueExpr(10), 10)
+      eval("- 10") must_==(MinusExpr(ValueExpr(10)), -10)
+      eval("- 10 20") must_==(SubExpr(ValueExpr(10), ValueExpr(20)), -10)
     }
   }
 
