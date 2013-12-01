@@ -27,10 +27,8 @@ class Q0ParserSpec extends Specification with SpecSupport {
     new Q0Parser(new StringReader(input))
 
   "Parse result" should {
-    "be the same as 30" in {
+    "be correct" in {
       process("+ 10 20") must_==(AddExpr(ValueExpr(10), ValueExpr(20)), 30)
-    }
-    "be the same as 30" in {
       process("- 50 20") must_==(SubExpr(ValueExpr(50), ValueExpr(20)), 30)
     }
   }
