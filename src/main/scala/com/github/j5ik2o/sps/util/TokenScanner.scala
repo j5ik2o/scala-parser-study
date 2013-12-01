@@ -166,7 +166,7 @@ case class TokenScanner(source: CharacterSource) {
   private def fetchSymbol(kind: TokenKind.Value) = {
     val symbol = source.get()
     source.consume()
-    new Token(kind, String.valueOf(symbol.asInstanceOf[Char]))
+    Token(kind, String.valueOf(symbol.asInstanceOf[Char]))
   }
 
   private def isEof(k: Int) = {
