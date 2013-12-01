@@ -1,2 +1,90 @@
-scala-parser-study
-==================
+# scala-parser-study
+
+この成果物は、@ashigeru さん主催のパーサー勉強会の資料をベースにScala版として再作成したものです。
+
+## Q0Parser
+
+Q0Parserクラス内のparse()メソッドの内容を、同メソッドのscaladocに説明される動作と同等の動作を行うようにせよ。
+また、単体テストQ0ParserSpecが全て成功することを確認すること。
+なお、Q0Parserは次のような構文規則と構文アクションを持ち、Expressionから開始する言語である。
+
+```
+Expression	::=	Value$a '+' Value$b        	    ; new AddExpr(a, b)
+Value	    ::=	NUMBER$t                        ; new ValueExpr(BigDecimal(t.image))
+```
+
+## Q1Parser
+
+Q1Parserクラス内のparse()メソッドの内容を、同メソッドのscaladocに説明される動作と同等の動作を行うようにせよ。
+また、単体テストQ1ParserSpecが全て成功することを確認すること。
+なお、Q1Parserは次のような構文規則と構文アクションを持ち、Expressionから開始する言語である。
+
+```
+Expression	::=	'+' Expression$a Expression$b  ; new AddExpr(a, b)
+	          | '-' Expression$a Expression$b  ; new SubExpr(a, b)
+              | Value$v                        ; v
+Value       ::= NUMBER$t                       ; new ValueExpr(BigDecimal(t.image))
+```
+
+## Q2Parser
+
+Q2Parserクラス内のparse()メソッドの内容を、同メソッドのscaladocに説明される動作と同等の動作を行うようにせよ。
+また、単体テストQ2ParserSpecが全て成功することを確認すること。
+なお、Q2Parserは次のような構文規則と構文アクションを持ち、Expressionから開始する言語である。
+
+```
+Expression	::=	'-' Value$a         ; new MinusExpr(a)
+	          |	'-' Value$a Value$b	; new SubExpr(a, b)
+              |	Value$v             ; v
+Value       ::=	NUMBER$t            ; new ValueExpr(BigDecimal(t.image))
+```
+
+### Q3Parser
+
+Q3Parserクラス内のparse()メソッドの内容を、同メソッドのscaladocに説明される動作と同等の動作を行うようにせよ。
+また、単体テストQ3ParserSpecが全て成功することを確認すること。
+なお、Q3Parserは次のような構文規則と構文アクションを持ち、Expressionから開始する言語である。
+
+```
+Expression	::=	Value$a '+' Value$b     ; new AddExpr(a, b)
+              |	Value$a '-' Value$b     ; new SubExpr(a, b)
+              |	Value$a '*' Value$b     ; new MultiExpr(a, b)
+              |	Value$a '/' Value$b     ; new DivExpr(a, b)
+              |	Value$v	; v
+Value       ::=	NUMBER$t                ; new ValueExpr(BigDecimal(t.image))
+```
+
+### Q4Parser
+
+Q4Parserクラス内のparse()メソッドの内容を、同メソッドのscaladocに説明される動作と同等の動作を行うようにせよ。
+また、単体テストQ4ParserSpecが全て成功することを確認すること。
+なお、Q4Parserは次のような構文規則と構文アクションを持ち、Expressionから開始する言語である。
+
+```
+Expression  ::=	AddExpr$e               ; e
+AddExpr     ::=	AddExpr$a '+' Value$b	; new AddExpr(a, b)
+              |	Value$a                 ; a
+Value       ::=	NUMBER$t                ; new ValueExpr(BigDecimal(t.image))
+```
+
+### Q5Parser
+
+Q5Parserクラス内のparse()メソッドの内容を、同メソッドのscaladocに説明される動作と同等の動作を行うようにせよ。
+また、単体テストQ5ParserSpecが全て成功することを確認すること。
+なお、Q5Parserは次のような構文規則と構文アクションを持ち、Expressionから開始する言語である。
+
+```
+Expression	::=	AddExpr$e                   ; e
+AddExpr     ::=	AddExpr$a '+' MultExpr$b	; new AddExpr(a, b)
+              |	AddExpr$a '-' MultExpr$b	; new SubExpr(a, b)
+              |	MultExpr$a                  ; a
+MultExpr	::=	MultExpr$a '*' UnaryExpr$b	; new MultiExpr(a, b)
+              |	MultExpr$a '/' UnaryExpr$b	; new DivExpr(a, b)
+              |	UnaryExpr$a                 ; a
+UnaryExpr	::=	'+' UnaryExpr$e             ; new PlusExpr(e)
+              |	'-' UnaryExpr$e             ; new MinusExpr(e)
+              |	PrimaryExpr$e               ; e
+PrimaryExpr	::=	'(' Expression$e ')'        ; new ParenthesizedExpr(e)
+              |	Value$v                     ; v
+Value       ::=	NUMBER$t                    ; new ValueExpr(BigDecimal(t.image))
+```
