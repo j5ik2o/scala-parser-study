@@ -16,7 +16,10 @@
  */
 package com.github.j5ik2o.sps.util
 
-import com.github.j5ik2o.sps.model.{SubExpr, ValueExpr, AddExpr, Expression}
+import com.github.j5ik2o.sps.model._
+import com.github.j5ik2o.sps.model.SubExpr
+import com.github.j5ik2o.sps.model.AddExpr
+import com.github.j5ik2o.sps.model.ValueExpr
 
 case class Evaluator() extends ExpressionVisitor {
 
@@ -30,6 +33,20 @@ case class Evaluator() extends ExpressionVisitor {
       (visit(l), visit(r)) match {
         case (l: Int, r: Int) =>
           l - r
+      }
+    case MinusExpr(e) =>
+      visit(e) match {
+        case e: Int =>
+          e * -1
+      }
+    case DivExpr(l, r) =>
+      (visit(l), visit(r)) match {
+        case (l: Int, r: Int) =>
+         l.toDouble / r.toDouble
+      }
+    case ParenthesizedExpr(e) =>
+      visit(e) match {
+        case e: Int => e
       }
     case ValueExpr(v) => v
   }

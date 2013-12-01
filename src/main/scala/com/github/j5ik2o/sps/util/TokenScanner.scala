@@ -74,16 +74,14 @@ case class TokenScanner(source: CharacterSource) {
   private def isIdentifierStart(c: Int) = {
     ('A' <= c && c <= 'Z') ||
       ('a' <= c && c <= 'z') ||
-      (c == '_')
+      (c == '_') || (c == '(') || (c == ')') || isOperator(c) || isDigit(c)
   }
 
   private def isOperator(c: Int) = {
     (c == '+') ||
       (c == '-') ||
       (c == '*') ||
-      (c == '/') ||
-      (c == '(') ||
-      (c == ')')
+      (c == '/')
   }
 
   private def isDigit(c: Int) = {
@@ -91,7 +89,9 @@ case class TokenScanner(source: CharacterSource) {
   }
 
   private def isIdentifierPart(c: Int) = {
-    isIdentifierStart(c) || isDigit(c) || isOperator(c)
+    ('A' <= c && c <= 'Z') ||
+      ('a' <= c && c <= 'z') ||
+      (c == '_') || isDigit(c)
   }
 
   val regex = """[0-9]+""".r
@@ -102,6 +102,10 @@ case class TokenScanner(source: CharacterSource) {
       case "else" => TokenKind.ELSE
       case "+" => TokenKind.PLUS
       case "-" => TokenKind.MINUS
+      case "*" => TokenKind.ASTERISK
+      case "/" => TokenKind.SLASH
+      case "(" => TokenKind.OPEN_PAREN
+      case ")" => TokenKind.CLOSE_PAREN
       case regex() => TokenKind.NUMBER
     }
   }
@@ -135,17 +139,21 @@ case class TokenScanner(source: CharacterSource) {
       }
 
     }
-
-    loop()
+    if (start != '(' && start != ')') {
+      loop()
+    }
     val image = buf.toString()
+    //println(s"buf = $image")
     val kind = getIdentifierKind(image)
-    new Token(kind, image)
+    val r = Token(kind, image)
+    //println(r)
+    r
   }
 
   private def fetch: Option[Token] = {
     consumeWhiteSpace()
     val head = source.get()
-    if (isIdentifierPart(head)) {
+    if (isIdentifierStart(head)) {
       Some(fetchIdentifier())
     } else if (head == CharacterSource.EOF) {
       None

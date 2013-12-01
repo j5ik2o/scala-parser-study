@@ -18,6 +18,6 @@ package com.github.j5ik2o.sps.util
 
 object TokenKind extends Enumeration {
 
-  val IF, ELSE, SOMETHING, COND, UNKNOWN, PLUS, MINUS, NUMBER, EOF = Value
+  val IF, ELSE, SOMETHING, COND, UNKNOWN, PLUS, MINUS, ASTERISK, SLASH, OPEN_PAREN, CLOSE_PAREN, NUMBER, EOF = Value
 
 }
