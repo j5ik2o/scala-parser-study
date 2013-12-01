@@ -26,28 +26,36 @@ case class Evaluator() extends ExpressionVisitor {
   def visit(expression: Expression): Any = expression match {
     case AddExpr(l, r) =>
       (visit(l), visit(r)) match {
-        case (l: Int, r: Int) =>
+        case (l: BigDecimal, r: BigDecimal) =>
           l + r
       }
     case SubExpr(l, r) =>
       (visit(l), visit(r)) match {
-        case (l: Int, r: Int) =>
+        case (l: BigDecimal, r: BigDecimal) =>
           l - r
+      }
+    case PlusExpr(e) =>
+      visit(e) match {
+        case e: BigDecimal =>
+          e * +1
       }
     case MinusExpr(e) =>
       visit(e) match {
-        case e: Int =>
+        case e: BigDecimal =>
           e * -1
+      }
+    case MultiExpr(l, r) =>
+      (visit(l), visit(r)) match {
+        case (l: BigDecimal, r: BigDecimal) =>
+          l * r
       }
     case DivExpr(l, r) =>
       (visit(l), visit(r)) match {
-        case (l: Int, r: Int) =>
-         l.toDouble / r.toDouble
+        case (l: BigDecimal, r: BigDecimal) =>
+         l / r
       }
     case ParenthesizedExpr(e) =>
-      visit(e) match {
-        case e: Int => e
-      }
+      visit(e)
     case ValueExpr(v) => v
   }
 }
