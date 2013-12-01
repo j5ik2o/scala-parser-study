@@ -48,7 +48,7 @@ class Q1Parser (reader: Reader) extends Parser {
     result
   }
 
-  def Expression: Expression = {
+  private def Expression: Expression = {
     if(consume(TokenKind.PLUS)) {
       AddExpr(Expression, Expression)
     } else if (consume(TokenKind.MINUS)) {
@@ -58,7 +58,7 @@ class Q1Parser (reader: Reader) extends Parser {
     }
   }
 
-  def Value: Expression = {
+  private def Value: Expression = {
     if (scanner.get().kind == TokenKind.NUMBER) {
       val token = scanner.consume
       ValueExpr(BigDecimal(token.image))
@@ -66,4 +66,5 @@ class Q1Parser (reader: Reader) extends Parser {
       throw ParseException("NUMBER : " + scanner.get())
     }
   }
+
 }

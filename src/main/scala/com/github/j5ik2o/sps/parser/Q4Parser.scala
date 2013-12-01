@@ -17,7 +17,9 @@
 package com.github.j5ik2o.sps.parser
 
 import java.io.Reader
-import com.github.j5ik2o.sps.model.Expression
+import com.github.j5ik2o.sps.model.{AddExpr, ValueExpr, Expression}
+import com.github.j5ik2o.sps.util.{ParseException, TokenKind}
+import scala.annotation.tailrec
 
 class Q4Parser(reader: Reader) extends Parser {
 
@@ -41,6 +43,46 @@ class Q4Parser(reader: Reader) extends Parser {
    * @return 解析結果の式
    * @throws ParseException 構文解析に失敗した場合
    */
-  def parse(): Expression = ???
+  def parse(): Expression = {
+    val result = Expression
+    Eof()
+    result
+  }
+
+  private def Expression: Expression = {
+    val expr = AdditiveExpression
+    expr
+  }
+
+  private def AdditiveExpression: Expression = {
+    // AddExpr$a '+' Value$b
+    // Value$a
+    // =>
+    // Value$a ( '+' Value$b ; a = new Add(a, b) )* ; a
+    var a = Value
+
+    @tailrec
+    def loop(): Unit = {
+      if (consume(TokenKind.PLUS)) {
+        val b = Value
+        a = AddExpr(a, b)
+        loop()
+      } else {
+        ()
+      }
+    }
+
+    loop()
+    a
+  }
+
+  private def Value: Expression = {
+    if (scanner.get().kind == TokenKind.NUMBER) {
+      val token = scanner.consume
+      ValueExpr(BigDecimal(token.image))
+    } else {
+      throw ParseException("NUMBER : " + scanner.get())
+    }
+  }
 
 }

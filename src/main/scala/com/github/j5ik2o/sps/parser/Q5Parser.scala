@@ -17,7 +17,13 @@
 package com.github.j5ik2o.sps.parser
 
 import java.io.Reader
-import com.github.j5ik2o.sps.model.Expression
+import com.github.j5ik2o.sps.model._
+import com.github.j5ik2o.sps.util.TokenKind
+import com.github.j5ik2o.sps.util.ParseException
+import com.github.j5ik2o.sps.model.AddExpr
+import com.github.j5ik2o.sps.model.ValueExpr
+import com.github.j5ik2o.sps.model.ParenthesizedExpr
+import scala.annotation.tailrec
 
 class Q5Parser(reader: Reader) extends Parser {
 
@@ -52,6 +58,107 @@ class Q5Parser(reader: Reader) extends Parser {
    * @return 解析結果の式
    * @throws ParseException 構文解析に失敗した場合
    */
-  def parse(): Expression = ???
+  def parse(): Expression = {
+    val expr = Expression
+    Eof()
+    expr
+  }
+
+  private def Expression: Expression = {
+    val expr = AdditiveExpression
+    expr
+  }
+
+  private def Value: Expression = {
+    if (scanner.get().kind == TokenKind.NUMBER) {
+      val token = scanner.consume
+      ValueExpr(BigDecimal(token.image))
+    } else {
+      throw ParseException("NUMBER : " + scanner.get())
+    }
+  }
+
+  private def AdditiveExpression: Expression = {
+    // AddExpr$a '+'/'-' MultExpr$b
+    // MultExpr$a
+    // =>
+    // MultExpr$a ( '+'/'-' MultExpr$b ; a = new Add/Subtract(a, b) )* ; a
+    var a = MultiplicativeExpression
+    @tailrec
+    def loop(): Unit = {
+      if (consume(TokenKind.PLUS)) {
+        val b = MultiplicativeExpression
+        a = AddExpr(a, b)
+        loop()
+      } else if (consume(TokenKind.MINUS)) {
+        val b = MultiplicativeExpression
+        a = SubExpr(a, b)
+        loop()
+      } else {
+        ()
+      }
+    }
+    loop()
+    a
+  }
+
+  private def MultiplicativeExpression: Expression = {
+    // MultExpr$a '+'/'-' UnaryExpr$b
+    // UnaryExpr$a
+    // =>
+    // UnaryExpr$a ( '*'/'/' UnaryExpr$b ; a = new Multiply/Divide(a, b) )* ; a
+    var a = UnaryExpression
+    @tailrec
+    def loop(): Unit = {
+      if (consume(TokenKind.ASTERISK)) {
+        val b = UnaryExpression
+        a = MultiExpr(a, b)
+        loop()
+      }
+      else if (consume(TokenKind.SLASH)) {
+        val b = UnaryExpression
+        a = DivExpr(a, b)
+        loop()
+      }
+      else {
+        ()
+      }
+    }
+    loop()
+    a
+  }
+
+  private def UnaryExpression: Expression = {
+    // '+' UnaryExpression$e ; new Plus(e)
+    if (consume(TokenKind.PLUS)) {
+      val operand = UnaryExpression
+      PlusExpr(operand)
+    }
+    // '-' UnaryExpression$e ; new Minus(e)
+    else if (consume(TokenKind.MINUS)) {
+      val operand = UnaryExpression
+      MinusExpr(operand)
+    }
+    // PrimaryExpression$e ; e
+    else {
+      PrimaryExpression
+    }
+  }
+
+  private def PrimaryExpression: Expression = {
+    // '(' Expression$e ')' ; new Parenthesized(e)
+    if (consume(TokenKind.OPEN_PAREN)) {
+      val v = Expression
+      if (!consume(TokenKind.CLOSE_PAREN)) {
+        throw ParseException(scanner.get().toString)
+      }
+      ParenthesizedExpr(v)
+    }
+    // Value$v ; v
+    else {
+      val v = Value
+      v
+    }
+  }
 
 }
