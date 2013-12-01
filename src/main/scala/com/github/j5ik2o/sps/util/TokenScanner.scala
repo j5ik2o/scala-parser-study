@@ -1,12 +1,32 @@
-package com.github.j5ik2o.util
+/*
+ * Copyright 2010 @ashigeru.
+ * Copyright 2013 @j5ik2o.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+package com.github.j5ik2o.sps.util
 
 import scala.collection.mutable.ListBuffer
+import scala.annotation.tailrec
 
 
-class TokenScanner(source: CharacterSource) {
-  private val EOF: Token = new Token(TokenKind.EOF, "")
+case class TokenScanner(source: CharacterSource) {
+
+  private val EOF = Token(TokenKind.EOF, "")
+
   private var content: Array[Token] = Array.empty
-  private var cursor: Int = -1
+
+  private var cursor = -1
 
   def get(k: Int = 0) = {
     require(k >= 0)
@@ -34,22 +54,36 @@ class TokenScanner(source: CharacterSource) {
       return
     }
     val list = ListBuffer[Token]()
-    def loop: Unit = {
+
+    @tailrec
+    def loop(): Unit = {
       val token = fetch
       if (token.isEmpty) {
         ()
       } else {
         list.append(token.get)
-        loop
+        loop()
       }
     }
-    loop
+
+    loop()
     cursor = 0
     content = list.toArray
   }
 
   private def isIdentifierStart(c: Int) = {
-    ('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z') || (c == '_') || (c == '+') || (c == '-')
+    ('A' <= c && c <= 'Z') ||
+      ('a' <= c && c <= 'z') ||
+      (c == '_')
+  }
+
+  private def isOperator(c: Int) = {
+    (c == '+') ||
+      (c == '-') ||
+      (c == '*') ||
+      (c == '/') ||
+      (c == '(') ||
+      (c == ')')
   }
 
   private def isDigit(c: Int) = {
@@ -57,7 +91,7 @@ class TokenScanner(source: CharacterSource) {
   }
 
   private def isIdentifierPart(c: Int) = {
-    isIdentifierStart(c) || isDigit(c)
+    isIdentifierStart(c) || isDigit(c) || isOperator(c)
   }
 
   val regex = """[0-9]+""".r
@@ -70,8 +104,9 @@ class TokenScanner(source: CharacterSource) {
       case "-" => TokenKind.MINUS
       case regex() => TokenKind.NUMBER
     }
- }
+  }
 
+  @tailrec
   private def consumeWhiteSpace(): Unit = {
     val c = source.get()
     if (!Character.isWhitespace(c)) {
@@ -88,6 +123,7 @@ class TokenScanner(source: CharacterSource) {
     val start = source.consume()
     buf.append(start.asInstanceOf[Char])
 
+    @tailrec
     def loop(): Unit = {
       val part = source.get()
       if (!isIdentifierPart(part)) {
