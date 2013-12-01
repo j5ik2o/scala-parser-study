@@ -17,7 +17,8 @@
 package com.github.j5ik2o.sps.parser
 
 import java.io.Reader
-import com.github.j5ik2o.sps.model.Expression
+import com.github.j5ik2o.sps.model.{SubExpr, AddExpr, ValueExpr, Expression}
+import com.github.j5ik2o.sps.util.{ParseException, TokenKind}
 
 class Q1Parser (reader: Reader) extends Parser {
 
@@ -41,6 +42,28 @@ class Q1Parser (reader: Reader) extends Parser {
    * @return 解析結果の式
    * @throws ParseException 構文解析に失敗した場合
    */
-  def parse(): Expression = ???
+  def parse(): Expression = {
+    val result = Expression
+    Eof()
+    result
+  }
 
+  def Expression: Expression = {
+    if(consume(TokenKind.PLUS)) {
+      AddExpr(Expression, Expression)
+    } else if (consume(TokenKind.MINUS)) {
+      SubExpr(Expression, Expression)
+    } else {
+      Value
+    }
+  }
+
+  def Value: Expression = {
+    if (scanner.get().kind == TokenKind.NUMBER) {
+      val token = scanner.consume
+      ValueExpr(BigDecimal(token.image))
+    } else {
+      throw ParseException("NUMBER : " + scanner.get())
+    }
+  }
 }
