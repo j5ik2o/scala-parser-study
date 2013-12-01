@@ -33,7 +33,7 @@ class Q5Parser(reader: Reader) extends Parser {
    *     AddExpr ::= AddExpr$a '+' MultExpr$b   ; new AddExpr(a, b)
    *              |  AddExpr$a '-' MultExpr$b   ; new SubExpr(a, b)
    *              |  MultExpr$a                 ; a
-   *    MultExpr ::= MultExpr$a '*' UnaryExpr$b ; new MultiExpra, b)
+   *    MultExpr ::= MultExpr$a '*' UnaryExpr$b ; new MultiExpr(a, b)
    *              |  MultExpr$a '/' UnaryExpr$b ; new DivExpr(a, b)
    *              |  UnaryExpr$a                ; a
    *   UnaryExpr ::= '+' UnaryExpr$e            ; new PlusExpr(e)
@@ -41,7 +41,7 @@ class Q5Parser(reader: Reader) extends Parser {
    *              |  PrimaryExpr$e              ; e
    * PrimaryExpr ::= '(' Expression$e ')'       ; new ParenthesizedExpr(e)
    *              |  Value$v                    ; v
-   *       Value ::= NUMBER$t                   ; new ValueExpr(t.image)
+   *       Value ::= NUMBER$t                   ; new ValueExpr(BigDecimal(t.image))
    * }}}
    *
    * つまり、通常の四則演算、+-の符号、括弧、整数が利用可能な通常の式を解析できる。

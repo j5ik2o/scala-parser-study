@@ -31,7 +31,7 @@ class Q0Parser(reader: Reader) extends Parser {
    * {{{
    * Expression ::= '+' Value$a Value$b ; new AddExpr(a, b)
    *             |  '-' Value$a Value$b ; new SubExpr(a, b)
-   *      Value ::= NUMBER$t            ; new ValueExpr(t.image)
+   *      Value ::= NUMBER$t            ; new ValueExpr(BigDecimal(t.image))
    * }}}
    *
    * ただし、それぞれの構文アクションに出現する型名は

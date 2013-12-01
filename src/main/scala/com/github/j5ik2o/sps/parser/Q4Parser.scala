@@ -30,9 +30,9 @@ class Q4Parser(reader: Reader) extends Parser {
    *
    * {{{
    *  Expression ::= AddExpr$e             ; e
-   *     AddExpr ::= AddExpr$a '+' Value$b ; new Add(a, b)
+   *     AddExpr ::= AddExpr$a '+' Value$b ; new AddExpr(a, b)
    *              |  Value$a               ; a
-   *       Value ::= NUMBER$t              ; new Value(t.image)
+   *       Value ::= NUMBER$t              ; new ValueExpr(BigDecimal(t.image))
    * }}}
    *
    * ただし、それぞれの構文アクションに出現する型名は

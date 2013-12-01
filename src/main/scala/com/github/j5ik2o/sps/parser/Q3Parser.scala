@@ -34,7 +34,7 @@ class Q3Parser(reader: Reader) extends Parser {
    *             |  Value$a '*' Value$b ; new MultiExpr(a, b)
    *             |  Value$a '/' Value$b ; new DivExpr(a, b)
    *             |  Value$a             ; a
-   *      Value ::= NUMBER$t            ; new ValueExpr(t.image)
+   *      Value ::= NUMBER$t            ; new ValueExpr(BigDecimal(t.image))
    * }}}
    *
    * ただし、それぞれの構文アクションに出現する型名は

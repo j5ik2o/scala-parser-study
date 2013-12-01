@@ -32,7 +32,7 @@ class Q1Parser (reader: Reader) extends Parser {
    * Expression ::= '+' Expression$a Expression$b ; new AddExpr(a, b)
    *             |  '-' Expression$a Expression$b ; new SubExpr(a, b)
    *             |  Value$v                       ; v
-   *      Value ::= NUMBER$t                      ; new ValueExpr(t.image)
+   *      Value ::= NUMBER$t                      ; new ValueExpr(BigDecimal(t.image))
    * }}}
    *
    * ただし、それぞれの構文アクションに出現する型名は
