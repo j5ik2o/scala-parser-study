@@ -54,7 +54,7 @@ Expression	::=	Value$a '+' Value$b     ; new AddExpr(a, b)
 Value       ::=	NUMBER$t                ; new ValueExpr(BigDecimal(t.image))
 ```
 
-### Q4Parser
+## Q4Parser
 
 [Q4Parser](https://github.com/j5ik2o/scala-parser-study/blob/develop/src/main/scala/com/github/j5ik2o/sps/parser/Q4Parser.scala)クラス内のparse()メソッドの内容を、同メソッドのscaladocに説明される動作と同等の動作を行うようにせよ。
 また、単体テスト[Q4ParserSpec](https://github.com/j5ik2o/scala-parser-study/blob/develop/src/test/scala/com/github/j5ik2o/sps/parser/Q4ParserSpec.scala)が全て成功することを確認すること。
