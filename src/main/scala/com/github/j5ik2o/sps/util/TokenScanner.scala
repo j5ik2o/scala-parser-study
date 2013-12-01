@@ -97,19 +97,17 @@ case class TokenScanner(source: CharacterSource) {
       (c == '_') || isDigit(c)
   }
 
-  val regex = """[0-9]+""".r
+  private val numberPattern = """[0-9]+""".r
 
   private def getIdentifierKind(image: String) = {
     image match {
-      case "if" => TokenKind.IF
-      case "else" => TokenKind.ELSE
       case "+" => TokenKind.PLUS
       case "-" => TokenKind.MINUS
       case "*" => TokenKind.ASTERISK
       case "/" => TokenKind.SLASH
       case "(" => TokenKind.OPEN_PAREN
       case ")" => TokenKind.CLOSE_PAREN
-      case regex() => TokenKind.NUMBER
+      case numberPattern() => TokenKind.NUMBER
     }
   }
 
