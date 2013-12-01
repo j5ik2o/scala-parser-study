@@ -24,19 +24,13 @@ import com.github.j5ik2o.sps.model.ValueExpr
 
 class Q5ParserSpec extends Specification with SpecSupport {
 
-  sequential
-
   protected def createParser(input: String): Parser =
     new Q5Parser(new StringReader(input))
 
   "Parse result" should {
-    "be the same as 10" in {
+    "be correct" in {
       process("(((10)))") must_==(ParenthesizedExpr(ParenthesizedExpr(ParenthesizedExpr(ValueExpr(10)))), 10)
-    }
-    "be the same as -10" in {
       process("10 + 20 - 30 * 40 / 60") must_==(SubExpr(AddExpr(ValueExpr(10),ValueExpr(20)),DivExpr(MultiExpr(ValueExpr(30),ValueExpr(40)),ValueExpr(60))),10)
-    }
-    "be the same as -10" in {
       process("10 + -(20 - +30) + +-0") must_==(AddExpr(AddExpr(ValueExpr(10),MinusExpr(ParenthesizedExpr(SubExpr(ValueExpr(20),PlusExpr(ValueExpr(30)))))),PlusExpr(MinusExpr(ValueExpr(0)))),20)
     }
   }
