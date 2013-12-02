@@ -11,7 +11,8 @@
 なお、Q0Parserは次のような構文規則と構文アクションを持ち、Expressionから開始する言語である。
 
 ```
-Expression	::=	Value$a '+' Value$b        	    ; new AddExpr(a, b)
+Expression ::= '+' Value$a Value$b		; new AddExpr(a, b) 
+            |  '-' Value$a Value$b		; new SubExpr(a, b)
 Value	    ::=	NUMBER$t                        ; new ValueExpr(BigDecimal(t.image))
 ```
 
