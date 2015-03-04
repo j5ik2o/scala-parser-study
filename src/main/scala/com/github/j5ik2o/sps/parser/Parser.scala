@@ -26,12 +26,21 @@ trait Parser {
 
   protected val scanner: TokenScanner
 
+  /**
+   * EOFであるかどうか検証する。
+   */
   protected def Eof(): Unit = {
     if (scanner.get().kind != TokenKind.EOF) {
       throw ParseException("EOF = " + scanner.get())
     }
   }
 
+  /**
+   * 指定したTokenKindであれば消費しtrueを返す。
+   *
+   * @param kind [[com.github.j5ik2o.sps.util.TokenKind]]
+   * @return TokenKindが一致した場合truekkkkkjjjjj
+   */
   protected def consume(kind: TokenKind.Value): Boolean = {
     if (scanner.get().kind == kind) {
       scanner.consume
